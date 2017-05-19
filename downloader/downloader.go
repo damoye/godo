@@ -49,12 +49,20 @@ func (d *Downloader) Run() error {
 			d.written += n
 			now := time.Now()
 			if seconds := now.Sub(recordTime).Seconds(); seconds > 1 {
-				fmt.Printf(
-					"\rPROGRESS: %6.2f%%, SPEED: %6.2fKB/s, TOTAL: %dMB",
-					float64(d.written)/float64(resp.ContentLength)*100,
-					float64(d.written-recordWritten)/1024/seconds,
-					resp.ContentLength/1024/1024,
-				)
+				if resp.ContentLength == 0 {
+					fmt.Printf(
+						"\rPROGRESS: %6.2fMB, SPEED: %6.2fKB/s",
+						float64(d.written)/1024/1024,
+						float64(d.written-recordWritten)/1024/seconds,
+					)
+				} else {
+					fmt.Printf(
+						"\rPROGRESS: %6.2f%%, SPEED: %6.2fKB/s, TOTAL: %dMB",
+						float64(d.written)/float64(resp.ContentLength)*100,
+						float64(d.written-recordWritten)/1024/seconds,
+						resp.ContentLength/1024/1024,
+					)
+				}
 				recordWritten = d.written
 				recordTime = now
 			}
