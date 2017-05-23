@@ -36,6 +36,7 @@ func (d *Downloader) Run() error {
 	if err != nil {
 		return err
 	}
+	fmt.Printf("TOTAL: %dMB\r\n", resp.ContentLength/1024/1024)
 	defer resp.Body.Close()
 	buf := make([]byte, 32*1024)
 	var recordWritten int
@@ -57,10 +58,9 @@ func (d *Downloader) Run() error {
 					)
 				} else {
 					fmt.Printf(
-						"\rPROGRESS: %6.2f%%, SPEED: %6.2fKB/s, TOTAL: %dMB",
+						"\rPROGRESS: %6.2f%%, SPEED: %6.2fKB/s",
 						float64(d.written)/float64(resp.ContentLength)*100,
 						float64(d.written-recordWritten)/1024/seconds,
-						resp.ContentLength/1024/1024,
 					)
 				}
 				recordWritten = d.written
