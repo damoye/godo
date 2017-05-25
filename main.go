@@ -32,7 +32,7 @@ func main() {
 
 	var written, recordWritten int64
 	recordTime := time.Now()
-	buf := make([]byte, 32*1024)
+	buf := make([]byte, 64*1024)
 	for {
 		n, er := resp.Body.Read(buf)
 		if n > 0 {
@@ -45,7 +45,7 @@ func main() {
 			if elapsed >= 1 {
 				if resp.ContentLength > 0 {
 					fmt.Printf(
-						"\rPROGRESS: %.2f %%, SPEED: %.2f KB/s, TOTAL: %d MB",
+						"\rPROGRESS: %.2f %%, SPEED: %.2f KB/s, TOTAL: %d MB   ",
 						float64(written)/float64(resp.ContentLength)*100,
 						float64(written-recordWritten)/elapsed/1024,
 						resp.ContentLength/1024/1024,
